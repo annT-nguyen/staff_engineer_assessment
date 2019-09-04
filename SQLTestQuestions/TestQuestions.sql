@@ -48,6 +48,39 @@ between 1/1/2010 and 500 days past the current date.
 
 
 **********************/
+/***** Generate Date ******/
+USE PersonDatabase;
+
+DECLARE @StartDate DATE = '1/1/2010', @EndDate DATE = (select DateAdd(d,500,getdate()));
+Print @StartDate;
+Print @EndDate;
+-- prevent set or regional settings from interfering with 
+-- interpretation of dates / literals
+
+SET DATEFIRST 7;
+SET DATEFORMAT mdy;
+SET LANGUAGE US_ENGLISH;
+
+/****Getting the Date Value first****/
+INSERT INTO PersonDatabase.dbo.Dates
+(DateValue, DateDayofMonth, DateDayofYear, DateQuarter, DateWeekdayName, DateMonthName, DateYearMonth)
+SELECT d, Day(d) as DateDayofMonth, Datepart(DAYOFYEAR,d) as DateDayofYear,
+datepart(quarter,d) as DateQuarter, DateName(WEEKDAY, d) as DateWeekdayName, 
+DATENAME(month,d) as DateMonthName, 
+convert(varchar,datepart(yyyy, d))+convert(varchar,datepart(mm, d)) as DateYearMonth
+FROM
+(
+  SELECT d = DATEADD(DAY, rn - 1, @StartDate)
+  FROM 
+  (
+    SELECT TOP (DATEDIFF(DAY, @StartDate, @EndDate)) 
+      rn = ROW_NUMBER() OVER (ORDER BY s1.[object_id])
+    FROM sys.all_objects AS s1
+    CROSS JOIN sys.all_objects AS s2
+    -- on my system this would support > 5 million days
+    ORDER BY s1.[object_id]
+  ) AS x
+) AS y;
 
 
 /**********************
