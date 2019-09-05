@@ -67,4 +67,22 @@ month or year is not necessary.
 Use the dbo.Dates table if helpful.
 
 **********************/
-
+select CC.PersonID, CC.AttributionStartDate, CC.AttributionEndDate
+from 
+(
+select 
+C.personid, c.contractstartdate as AttributionStartDate,
+C.contractenddate as AttributionEndDate,
+D.DateDayofMonth as StartDoM, d2.DateDayofMonth as EndDoM,
+D.DateDayofYear as StartDoY, d2.dateDayofYear as EndDoY, 
+D.DateYearMonth as StartYM, d2.DateYearMonth as EndYM
+from PersonDatabase.dbo.contacts C with (nolock)
+join PersonDatabase.dbo.Dates D on C.ContractStartDate = D.DateValue
+join PersonDatabase.dbo.Dates d2 on C.contractenddate = d2.DateValue
+group by C.personid, c.Contractstartdate, C.ContractendDate, 
+D.DateDayofMonth , d2.DateDayofMonth ,
+D.DateDayofYear , d2.dateDayofYear , 
+D.DateYearMonth , d2.DateYearMonth 
+--order by C.PersonID, D.DateYearMonth, C.contractstartdate desc;
+) AS CC
+order by CC.PersonID, CC.AttributionStartDate, CC.AttributionEndDate
