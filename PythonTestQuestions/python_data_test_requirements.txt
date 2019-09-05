@@ -1,3 +1,7 @@
+Bridget,
+I have not worked with Python for the last 2 years but I am confident that I could pick up the language again in a short time.  I also would like to say that for building ETL framework, Microsoft Integration Services or Azure Data Factory would be a better choice to set up the data pipeline and perform ETL processes.  I have done both and would love to show you how quickly we can get that set up compare to native coding in Python.
+
+
 In this directory you will find an excel spreadsheet titled "Privia Family Medicine 113018.xlsx" containing demographics,
 quarter and risk data. We need this data to be manipulated and stored in our PersonDatabase for analysis.
 
